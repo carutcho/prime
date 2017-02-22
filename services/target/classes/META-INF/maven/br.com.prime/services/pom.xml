@@ -5,6 +5,7 @@
 
 	<properties>
 		<springframework.version>4.3.6.RELEASE</springframework.version>
+		<org.hibernate.hibernate-validator.version>5.0.1.Final</org.hibernate.hibernate-validator.version>
 	</properties>
 	
 	<parent>
@@ -20,6 +21,7 @@
 	<description>Modulo responsável por conter todos os serviços gerados pela aplicação</description>
 	
 	<dependencies>
+		
 		<dependency>
 			<groupId>br.com.prime</groupId>
 			<artifactId>commons</artifactId>
@@ -32,6 +34,7 @@
 			<version>1.0.0</version>
 			<scope>compile</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -47,6 +50,38 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>4.3.0.Final</version>
+		</dependency>
+		
+		<!-- lOG -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.6.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- Validation =================================================== -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${org.hibernate.hibernate-validator.version}</version>
 		</dependency>
 	</dependencies>
 
