@@ -1,4 +1,4 @@
-package br.com.prime.services.service;
+package br.com.prime.services.base;
 
 import java.io.Serializable;
 

@@ -6,13 +6,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.commons.controller.AbstractCrudBean;
+import br.com.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.entity.Produto;
 import br.com.prime.services.interfaces.ProdutoService;
 
+//TODO: testar property
+//@PropertySource(value ="casspath:teste.propertiers")
 @RestController
 @Transactional
 public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>  {
 
+	//TODO: property testar !!!!!
+	/*@Autowired
+	private Environment environment;
+	@PropertySource(value = "classpath:hibernate-dev.properties")
+	*/
 	
 	@Autowired
 	public ProdutoController(ProdutoService service) {
@@ -21,8 +29,13 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 
 	@RequestMapping("/produto/buscar")
 	public void buscarProduto(){
-		System.out.println("buscou por teste");
-		getService().buscarProduto(1L);
+		
+		try {
+			getService().buscarProduto(new Produto());
+			System.out.println("buscou por teste");
+		} catch (ServiceBusinessException e) {
+			System.out.println("Falha ao buscar");
+		}
 	}
 	
 
@@ -32,7 +45,12 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 		Produto produto = new Produto();
 		produto.setNome("Caneta");
 		produto.setDescricao("produto boladão wque usa para escrever!");
-		getService().incluirProduto(produto);
+		try {
+			getService().incluirProduto(produto);
+			System.out.println("buscou por teste");
+		} catch (ServiceBusinessException e) {
+			System.out.println("buscou por teste");
+		}
 	}
 	
 /*	@GetMapping("/produto/buscar/{id}")	

@@ -1,4 +1,4 @@
-package br.com.prime.services.service;
+package br.com.prime.services.base;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -8,18 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.commons.exceptions.ServiceBusinessException;
+import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.persistence.CrudDao;
-import br.com.prime.data.persistence.Persistent;
-
-/**
- * @author <a href="mailto:gewtonarq@gmail.com">Gewton Jhames</a>
- * @author <a href="mailto:misaelbarreto@gmail.com">Misael Barreto</a>
- * @author <a href="mailto:rrafaelpinto@gmail.com">Rafael Pinto</a>
- * 
- * @param <T>
- *            tipo que serÃ¡ persistido
- */
 
 public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>> implements CrudService<T> {
 
@@ -29,11 +20,6 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
     
 	protected final D dao;
 
-	/**
-	 * Cria <code>CrudServiceImpl</code> recebendo uma instancia de {@link CrudDao}.
-	 *
-	 * @param dao instancia
-	 */
 	public CrudServiceImpl(D dao) {
 		this.dao = dao;
 	}
@@ -48,7 +34,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 		}
 	}
 
-    public void remover(Integer id) throws ServiceBusinessException{
+    public void remover(Long id) throws ServiceBusinessException{
 		try {
 			dao.remover(id);
 		} catch (PersistenceValidateException e) {

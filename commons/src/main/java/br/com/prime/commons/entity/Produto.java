@@ -6,9 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import br.com.prime.commons.data.persistence.Persistent;
+
 @Entity
-public class Produto {
+public class Produto implements Persistent{
     
+	private static final long serialVersionUID = 1L;
+
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
@@ -66,6 +70,14 @@ public class Produto {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public String getLabel() {
+		return null;
+	}
+
+	public String getName() {
+		return null;
 	}
 	
 	

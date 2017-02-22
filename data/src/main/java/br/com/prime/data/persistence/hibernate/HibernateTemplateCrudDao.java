@@ -2,57 +2,26 @@ package br.com.prime.data.persistence.hibernate;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.persistence.CrudDao;
-import br.com.prime.data.persistence.Persistent;
-
-/**
- * ImplementaÃ§Ã£o da interface {@link CrudDao} para uso com Spring
- * {@link HibernateTemplate}.
- *
- * @author <a href="mailto:gewtonarq@gmail.com">Gewton Jhames</a>
- * @author <a href="mailto:misaelbarreto@gmail.com">Misael Barreto</a>
- * @author <a href="mailto:rrafaelpinto@gmail.com">Rafael Pinto</a>
- *
- * @param <T>
- *            tipo genÃ©rico que serÃ¡ persistido
- * @see {@link CrudDao}
- *
- * @version 0.3.0.Final
- * @since 0.1.0.Final
- */
-/*
- * TODO: Fazer um estudo com calma sobre o tratamento de exceÃ§Ãµes e assim rever
- * se as exceÃ§Ãµes aqui lanÃ§adas, e na arquitetura como um todo, estÃ£o de fato
- * utilizando a melhor prÃ¡tica.
- * 
- * Aproveitar e rever os locais em que deve usar o DataAcessExceptionTranslator
- * para deixar a mensagem mais amigÃ¡vel para o usuÃ¡rio final.
- */
 
 public abstract class HibernateTemplateCrudDao<T extends Persistent> implements CrudDao<T>{
 
@@ -62,16 +31,11 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 
 	protected Logger log = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-	protected SessionFactory sessionFactory;
+	@PersistenceContext(name="genEntityManagerFactory") 
+//	@Qualifier(value="genEntityManagerFactory")
+//	@Autowired
+	private EntityManager manager;
 
-	@Autowired
-	protected Validator validator;
-
-	/**
-	 * Cria <tt>HibernateTemplateCrudDao</tt> e localiza a classe concreta que
-	 * estÃ¡ sendo manipulada.
-	 */
 	@SuppressWarnings("unchecked")
 	public HibernateTemplateCrudDao() {
 		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -82,23 +46,10 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 	}
 
 	protected Session getSession() {
-		try {
-			return sessionFactory.getCurrentSession();
-			
-		} catch (HibernateException e) {
-			return sessionFactory.openSession();
-		}
+		return manager.unwrap(Session.class);
 	}
 
 	public void validar(T entity) throws PersistenceValidateException {
-		Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
-		List<String> errors = new ArrayList<String>();
-		for (ConstraintViolation<T> constraintViolation : constraintViolations) {
-			errors.add(constraintViolation.getMessage());
-		}
-		if (!errors.isEmpty()) {
-			throw new PersistenceValidateException(errors);
-		}
 	}
 
 	public void inserir(T entity) throws PersistenceValidateException {
@@ -197,18 +148,6 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 	 */
 	protected Integer countByCriteria(DetachedCriteria criteria) {
 
-		/*
-		 * Obs: Por algum motivo, a projeÃ§Ã£o rowCount nÃ£o retorna um valor
-		 * correto caso a entidade em questÃ£o possua algum atributo coleÃ§Ã£o, com
-		 * mapeamento OneToMany e carregamento EAGER. Verifiquei que o criteria
-		 * estÃ¡ totalmente correto, que os registros trazidos pelo criteria
-		 * tambÃ©m estÃ£o corretos, mas ao jogar a projeÃ§Ã£o
-		 * "Projections.rowCount()" a consulta executada ao final sempre Ã© algo
-		 * do tipo "select count(*) from entidade", ou seja, os relacionamentos
-		 * EAGER nÃ£o sÃ£o levados em conta pela projeÃ§Ã£o. Ver se hÃ¡ uma maneira
-		 * de contornar essa situaÃ§Ã£o, mesmo considerando nÃ£o ser uma boa
-		 * prÃ¡tica usar mapeamendo EAGER.
-		 */
 		criteria.setProjection(Projections.rowCount());
 		Criteria executableCriteria = criteria.getExecutableCriteria(getSession());
 		
@@ -249,17 +188,8 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 		return (count != null) ? count.intValue() : 0;
 	}
 
-	/**
-	 * Mesmo que {@link #countFromQuery(query, params)}, onde "params" igual a
-	 * null.
-	 */
 	protected int countFromQuery(String query) {
 		return countFromQuery(query, null);
-	}
-
-	@SuppressWarnings("unused")
-	private ClassMetadata getClassMetadata() {
-		return sessionFactory.getClassMetadata(getPersistentClass());
 	}
 
 	public void remover(T entity) throws PersistenceValidateException {
@@ -342,7 +272,7 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> buscarTodosOrdenados(int primeiroRegistro, int quantidadeRegistros, String campo, Boolean ordem) {
+	public List<T> buscarPorRangeOrdenado(int primeiroRegistro, int quantidadeRegistros, String campo, Boolean ordem) {
 		Criteria createCriteria = getSession().createCriteria(getPersistentClass());
 		if (campo != null) {
 			if (ordem) {

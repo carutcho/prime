@@ -7,6 +7,9 @@ import br.com.commons.exceptions.ServiceBusinessException;
 
 public abstract class AbstractCrudBean <P, S> {
 	
+	//TODO: internacionalizar
+	private static final String FALHA_AO_GENERICA = "Falha ao realizar a operação, contate um adm";
+
 	private final S service;
 	
 	private P entity;
@@ -26,10 +29,10 @@ public abstract class AbstractCrudBean <P, S> {
 		try {
             entity = persistentClass.newInstance();
         } catch (InstantiationException e) {
-            throw new ServiceBusinessException("Falha interna, procure um administrador");
+            throw new ServiceBusinessException(FALHA_AO_GENERICA);
             //TODO: LOG
         } catch (IllegalAccessException e) {
-        	throw new ServiceBusinessException("Falha interna, procure um administrador");
+        	throw new ServiceBusinessException(FALHA_AO_GENERICA);
             //TODO: LOG
         }
     }

@@ -1,25 +1,24 @@
 package br.com.prime.data.interfaces.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.stereotype.Repository;
 
 import br.com.prime.commons.entity.Produto;
+import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.interfaces.ProdutoDAO;
+import br.com.prime.data.persistence.hibernate.HibernateTemplateCrudDao;
 
 @Repository
-public class ProdutoDAOImp implements ProdutoDAO{
+public class ProdutoDAOImp extends HibernateTemplateCrudDao<Produto> implements ProdutoDAO{
 
-	@PersistenceContext
-	private EntityManager manager;
-	
-	public void inserirProduto(Produto produto) {
-		manager.persist(produto);
+	private static final long serialVersionUID = 1L;
+
+	public void inserirProduto(Produto produto) throws PersistenceValidateException {
+		//inserir(produto);
 		System.out.println("Inseriu no banco");
 	}
 
-	public void buscarProduto(Long id) {
+	public void buscarProduto(Produto produto) throws PersistenceValidateException {
+		//buscarPorId(produto.getId());
 		System.out.println("Buscou no banco");
 	}
 }
