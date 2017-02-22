@@ -13,12 +13,12 @@ public class ProdutoDAOImp extends HibernateTemplateCrudDao<Produto> implements 
 	private static final long serialVersionUID = 1L;
 
 	public void inserirProduto(Produto produto) throws PersistenceValidateException {
-		//inserir(produto);
+		inserir(produto);
 		System.out.println("Inseriu no banco");
 	}
 
 	public void buscarProduto(Produto produto) throws PersistenceValidateException {
-		//buscarPorId(produto.getId());
+		buscarPorId(produto.getId());
 		System.out.println("Buscou no banco");
 	}
 }

@@ -1,6 +1,7 @@
 package br.com.prime.services.interfaces.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import br.com.commons.exceptions.ServiceBusinessException;
@@ -13,22 +14,26 @@ import br.com.prime.services.interfaces.ProdutoService;
 @Service
 public class ProdutoServiceImpl extends CrudServiceImpl<Produto, ProdutoDAO> implements ProdutoService{
 
-	//TODO: internacionalizar
-	private static final String FALHA_AO_GENERICA = "Falha ao realizar a operação, contate um adm";
-	
 	private static final long serialVersionUID = 1L;
+	
+	//Mensagens 
+	private static final String MSG_ERRO_GENERICA_FALHA_GENERICA = "msg.erro.generica.falha.generica";
 
+	@Autowired
+	private Environment ev;
+	
 	@Autowired
 	public ProdutoServiceImpl(ProdutoDAO dao) {
 		super(dao);
 	}
-	
+
 	public void incluirProduto(Produto produto) throws ServiceBusinessException{
 		
 		try {
+			//TODO: esturar criar RN para este caso de validação validar(produto);
 			dao.inserirProduto(produto);
 		} catch (PersistenceValidateException e) {		
-			throw new ServiceBusinessException(FALHA_AO_GENERICA);
+			throw new ServiceBusinessException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
 		}
 	}
 
@@ -37,7 +42,7 @@ public class ProdutoServiceImpl extends CrudServiceImpl<Produto, ProdutoDAO> imp
 		try {
 			dao.buscarProduto(produto);
 		} catch (PersistenceValidateException e) {
-			throw new ServiceBusinessException(FALHA_AO_GENERICA);
+			throw new ServiceBusinessException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
 		}
-	}
+	}	
 }

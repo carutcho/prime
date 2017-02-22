@@ -1,6 +1,8 @@
 package br.com.prime.webservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,17 +12,13 @@ import br.com.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.entity.Produto;
 import br.com.prime.services.interfaces.ProdutoService;
 
-//TODO: testar property
-//@PropertySource(value ="casspath:teste.propertiers")
 @RestController
 @Transactional
 public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>  {
 
-	//TODO: property testar !!!!!
-	/*@Autowired
-	private Environment environment;
-	@PropertySource(value = "classpath:hibernate-dev.properties")
-	*/
+	
+	@Autowired
+	private Environment ev;
 	
 	@Autowired
 	public ProdutoController(ProdutoService service) {
@@ -32,36 +30,29 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 		
 		try {
 			getService().buscarProduto(new Produto());
-			System.out.println("buscou por teste");
 		} catch (ServiceBusinessException e) {
-			System.out.println("Falha ao buscar");
+			System.out.println(ev.getProperty("msg.erro.produto.consultar"));
 		}
 	}
 	
 
 	@RequestMapping("/produto/incluir")
 	public void incluirProduto(){
-		System.out.println("Incluindo o produto");
+		
+		Produto produto = gerarProduto();
+		try {
+			getService().incluirProduto(produto);
+			System.out.println(ev.getProperty("msg.sucesso.produto.inserir"));
+		} catch (ServiceBusinessException e) {
+			System.out.println(ev.getProperty("msg.erro.produto.inserir"));
+		}
+	}
+
+	private Produto gerarProduto() {
 		Produto produto = new Produto();
 		produto.setNome("Caneta");
 		produto.setDescricao("produto boladão wque usa para escrever!");
-		try {
-			getService().incluirProduto(produto);
-			System.out.println("buscou por teste");
-		} catch (ServiceBusinessException e) {
-			System.out.println("buscou por teste");
-		}
+		return produto;
 	}
-	
-/*	@GetMapping("/produto/buscar/{id}")	
-	public void buscarProdutoGeral(@PathVariable("id") Long id){
-		System.out.println("buscou sem teste");
-		service.buscarProduto(id);
-	}
-	
-	@PostMapping(value = "/produto/criar")
-	public void criarProduto(@RequestBody Produto produto){
-		service.incluirProduto(new Produto());
-	}*/
 	
 }

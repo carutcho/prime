@@ -5,8 +5,11 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -15,15 +18,20 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+
+@PropertySource(value ={"classpath:db-config.properties","messages_service_pt_BR.properties"})
 @Configuration
 @EnableTransactionManagement
 public class JPAConfiguration {
-
+	
+	@Autowired
+	private Environment ev;
+	
 	@Bean(name = "genEntityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "br.com.prime.commons.entity" });
+		em.setPackagesToScan(new String[] {"br.com.prime.commons.entity" });
 
 		em.setJpaVendorAdapter(jpaVendorAdapter());
 		em.setJpaProperties(additionalProperties());
@@ -34,10 +42,10 @@ public class JPAConfiguration {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/produtos");
-		dataSource.setUsername("produto");
-		dataSource.setPassword("produto123");
+		dataSource.setDriverClassName(ev.getProperty("db.driver"));
+		dataSource.setUrl(ev.getProperty("db.url.connection"));
+		dataSource.setUsername(ev.getProperty("db.user"));
+		dataSource.setPassword(ev.getProperty("db.password"));
 		return dataSource;
 	}
 
@@ -52,9 +60,9 @@ public class JPAConfiguration {
 	private Properties additionalProperties() {
 
 		Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", "update");
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-		properties.setProperty("hibernate.show_sql", "true");
+		properties.setProperty("hibernate.hbm2ddl.auto",ev.getProperty("db.hbm2ddl.auto"));
+		properties.setProperty("hibernate.dialect", ev.getProperty("db.dialect"));
+		properties.setProperty("hibernate.show_sql", ev.getProperty("db.show.sql"));
 		return properties;
 	}
 
