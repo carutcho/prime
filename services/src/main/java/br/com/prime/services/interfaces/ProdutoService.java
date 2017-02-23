@@ -8,5 +8,5 @@ public interface ProdutoService extends CrudService<Produto>{
 
 	public void incluirProduto(Produto produto) throws ServiceBusinessException;
 
-	public void buscarProduto(Produto produto) throws ServiceBusinessException;
+	public void buscarProdutoPorId(Long produto) throws ServiceBusinessException;
 }

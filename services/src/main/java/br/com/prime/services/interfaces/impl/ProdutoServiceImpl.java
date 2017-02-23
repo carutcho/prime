@@ -37,10 +37,10 @@ public class ProdutoServiceImpl extends CrudServiceImpl<Produto, ProdutoDAO> imp
 		}
 	}
 
-	public void buscarProduto(Produto produto) throws ServiceBusinessException{
+	public void buscarProdutoPorId(Long idProduto) throws ServiceBusinessException{
 		
 		try {
-			dao.buscarProduto(produto);
+			dao.buscarProdutoPorId(idProduto);
 		} catch (PersistenceValidateException e) {
 			throw new ServiceBusinessException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
 		}

@@ -8,5 +8,5 @@ public interface ProdutoDAO extends CrudDao<Produto> {
 
 	public void inserirProduto(Produto produto) throws PersistenceValidateException;
 	
-	public void buscarProduto(Produto produto) throws PersistenceValidateException;
+	public void buscarProdutoPorId(Long produto) throws PersistenceValidateException;
 }

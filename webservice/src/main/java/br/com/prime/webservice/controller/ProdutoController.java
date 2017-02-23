@@ -1,7 +1,6 @@
 package br.com.prime.webservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +26,8 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 
 	@RequestMapping("/produto/buscar")
 	public void buscarProduto(){
-		
 		try {
-			getService().buscarProduto(new Produto());
+			getService().buscarProdutoPorId(1L);
 		} catch (ServiceBusinessException e) {
 			System.out.println(ev.getProperty("msg.erro.produto.consultar"));
 		}

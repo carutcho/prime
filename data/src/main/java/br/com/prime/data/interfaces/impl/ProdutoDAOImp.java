@@ -17,8 +17,8 @@ public class ProdutoDAOImp extends HibernateTemplateCrudDao<Produto> implements 
 		System.out.println("Inseriu no banco");
 	}
 
-	public void buscarProduto(Produto produto) throws PersistenceValidateException {
-		buscarPorId(produto.getId());
+	public void buscarProdutoPorId(Long idProduto) throws PersistenceValidateException {
+		buscarPorId(idProduto);
 		System.out.println("Buscou no banco");
 	}
 }
