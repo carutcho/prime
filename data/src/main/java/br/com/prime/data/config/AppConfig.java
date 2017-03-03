@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan(basePackages = {"br.com.prime.data","br.com.prime.commons"})
-@Import(JPAConfiguration.class)
+@Import({JPAConfiguration.class, AuthServerOAuth2Config.class})
 public class AppConfig {
 
 }

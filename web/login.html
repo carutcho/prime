@@ -1,0 +1,19 @@
+<!doctype html>
+<html ng-app="login">
+	<head>
+		<meta name"viewport" content="with=device-width">
+		<meta charset="UTF-8">
+	</head>
+
+	<body ng-controller="LoginContoller">
+		<h1>Login</h1>
+		<label>Username</label><input ng-model="data.username"/>
+		<label>Password</label><input type="password" ng-model="data.password"/>
+		<a href="#" ng-click="login()">Login</a>
+	</body>
+
+  <script src="js/angular/angular.min.js"> </script>
+  <script src="js/angular-route/angular-route.min.js"> </script>
+  <script src="js/checkCoockie.js"> </script>
+  <script src="js/controller/LoginController.js"> </script>
+</html>
