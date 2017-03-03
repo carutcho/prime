@@ -1,15 +1,19 @@
-package br.com.commons.controller;
+package br.com.prime.webservice.controller.base;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
 import br.com.commons.exceptions.ServiceBusinessException;
 
 public abstract class AbstractCrudBean <P, S> {
-	
-	//TODO: internacionalizar
-	private static final String FALHA_AO_GENERICA = "Falha ao realizar a operação, contate um adm";
 
+	
+	@Autowired
+	private Environment properties;
+	
 	private final S service;
 	
 	private P entity;
@@ -29,10 +33,10 @@ public abstract class AbstractCrudBean <P, S> {
 		try {
             entity = persistentClass.newInstance();
         } catch (InstantiationException e) {
-            throw new ServiceBusinessException(FALHA_AO_GENERICA);
+        	throw new ServiceBusinessException(getProperties().getProperty("msg.erro.generica.falha.generica"));
             //TODO: LOG
         } catch (IllegalAccessException e) {
-        	throw new ServiceBusinessException(FALHA_AO_GENERICA);
+        	throw new ServiceBusinessException(getProperties().getProperty("msg.erro.generica.falha.generica"));
             //TODO: LOG
         }
     }
@@ -63,5 +67,13 @@ public abstract class AbstractCrudBean <P, S> {
 
 	public S getService() {
 		return service;
-	}	
+	}
+
+	public Environment getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Environment properties) {
+		this.properties = properties;
+	}
 }

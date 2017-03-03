@@ -1,7 +1,6 @@
 package br.com.prime.services.interfaces.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import br.com.commons.exceptions.ServiceBusinessException;
@@ -20,9 +19,6 @@ public class ProdutoServiceImpl extends CrudServiceImpl<Produto, ProdutoDAO> imp
 	private static final String MSG_ERRO_GENERICA_FALHA_GENERICA = "msg.erro.generica.falha.generica";
 
 	@Autowired
-	private Environment ev;
-	
-	@Autowired
 	public ProdutoServiceImpl(ProdutoDAO dao) {
 		super(dao);
 	}
@@ -33,7 +29,7 @@ public class ProdutoServiceImpl extends CrudServiceImpl<Produto, ProdutoDAO> imp
 			//TODO: esturar criar RN para este caso de validação validar(produto);
 			dao.inserirProduto(produto);
 		} catch (PersistenceValidateException e) {		
-			throw new ServiceBusinessException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
+			throw new ServiceBusinessException(getProperties().getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
 		}
 	}
 
@@ -42,7 +38,7 @@ public class ProdutoServiceImpl extends CrudServiceImpl<Produto, ProdutoDAO> imp
 		try {
 			dao.buscarProdutoPorId(idProduto);
 		} catch (PersistenceValidateException e) {
-			throw new ServiceBusinessException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
+			throw new ServiceBusinessException(getProperties().getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
 		}
 	}	
 }

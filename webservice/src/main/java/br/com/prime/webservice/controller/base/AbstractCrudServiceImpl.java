@@ -1,4 +1,4 @@
-package br.com.commons.controller;
+package br.com.prime.webservice.controller.base;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;

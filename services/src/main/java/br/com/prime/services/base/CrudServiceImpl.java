@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.commons.exceptions.ServiceBusinessException;
@@ -16,6 +18,9 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 
 	private static final long serialVersionUID = -3584132647978946856L;
 
+	@Autowired
+	private Environment properties;
+	
 	protected Logger log = LoggerFactory.getLogger(getClass());
     
 	protected final D dao;
@@ -82,6 +87,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 	        return dao.buscarPorId(id);
         } catch (PersistenceValidateException e) {
             throw new ServiceBusinessException(e.getMessage());
+			//TODO: Por log
         }
 	}
 
@@ -119,4 +125,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
         }
 	}
 
+	protected Environment getProperties() {
+		return properties;
+	}
 }

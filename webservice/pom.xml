@@ -13,7 +13,6 @@
 		<springframework.version>4.3.6.RELEASE</springframework.version>
 		<jackson.version>2.7.5</jackson.version>
 		<spring.security.version>4.0.4.RELEASE</spring.security.version>
-		
 	</properties>
 
 	<artifactId>webservice</artifactId>
@@ -43,29 +42,6 @@
 			<version>${springframework.version}</version>
 		</dependency>
 
-		<!-- Security ======================================= -->
-		
-		<dependency>
-		    <groupId>org.springframework.security</groupId>
-		    <artifactId>spring-security-config</artifactId>
-		    <version>${spring.security.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-			<version>${spring.security.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>${spring.security.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>${spring.security.version}</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -104,7 +80,7 @@
 		</dependency>
 	</dependencies>
 	<!-- Security ===================== -->
-	<repositories>
+<!-- 	<repositories>
 		<repository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
@@ -113,7 +89,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-	</repositories>
+	</repositories> -->
 	
 	<build>
 		<finalName>prime</finalName>
