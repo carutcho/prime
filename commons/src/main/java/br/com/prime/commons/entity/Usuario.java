@@ -2,6 +2,7 @@ package br.com.prime.commons.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -24,6 +25,26 @@ public class Usuario implements Persistent, UserDetails{
     
 	private static final long serialVersionUID = 1L;
 
+	 public Usuario(
+		 	Long id,
+			String nome,
+			String login,
+			String senha,
+			boolean ativo,
+			List<Perfil> perfis, 
+			String descricao,
+			Date ultimaAtualizacao
+	    ) {
+		 	this.id = id;
+			this.nome = nome;
+			this.login = login;
+			this.senha = senha;
+			this.ativo = ativo;
+			this.perfis = perfis;
+			this.descricao = descricao;
+			this.setUltimaAtualizacao(ultimaAtualizacao);
+	    }
+	
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "generic_seq_gen")
@@ -48,6 +69,9 @@ public class Usuario implements Persistent, UserDetails{
 	@Column(name="descricao")
     private String descricao;
     
+	@Column(name="ultimaatualizacao")
+    private Date ultimaAtualizacao;	
+	
     public Long getId() {
         return id;
     }
@@ -164,6 +188,13 @@ public class Usuario implements Persistent, UserDetails{
 	public boolean isEnabled() {
 		return getAtivo();
 	}
-	
-	
+
+	public Date getUltimaAtualizacao() {
+		return ultimaAtualizacao;
+	}
+
+	public void setUltimaAtualizacao(Date ultimaAtualizacao) {
+		this.ultimaAtualizacao = ultimaAtualizacao;
+	}
+
 }

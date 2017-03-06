@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@PropertySource(value ="classpath:messages_webservice_pt_BR.properties")
+@PropertySource(value = {"classpath:messages_webservice_pt_BR.properties","classpath:config.properties"})
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"br.com.prime.services", "br.com.prime.data","br.com.prime.webservice","br.com.prime.commons"})

@@ -1,4 +1,4 @@
-package br.com.prime.data.config;
+/*package br.com.prime.data.config;
 
 import javax.sql.DataSource;
 
@@ -60,4 +60,4 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 	}
 	
 	
-}
+}*/

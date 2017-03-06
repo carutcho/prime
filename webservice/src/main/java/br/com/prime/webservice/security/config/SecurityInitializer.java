@@ -1,4 +1,4 @@
-package br.com.prime.webservice.config;
+package br.com.prime.webservice.security.config;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
