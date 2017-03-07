@@ -25,7 +25,11 @@ public class Usuario implements Persistent, UserDetails{
     
 	private static final long serialVersionUID = 1L;
 
-	 public Usuario(
+	public Usuario(){
+		
+	}
+	
+	public Usuario(
 		 	Long id,
 			String nome,
 			String login,

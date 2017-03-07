@@ -13,14 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.com.prime.webservice.security.JwtAuthenticationEntryPoint;
-import br.com.prime.webservice.security.JwtAuthenticationTokenFilter;
+import br.com.prime.webservice.security.NaoAutorizadoResponse;
+import br.com.prime.webservice.security.AutenticadorTokenFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private JwtAuthenticationEntryPoint unauthorizedHandler;
+	private NaoAutorizadoResponse unauthorizedHandler;
 	  
 	@Autowired	
 	private UserDetailsService usuarios;
@@ -36,8 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	 
 	@Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
+    public AutenticadorTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new AutenticadorTokenFilter();
     }
 
 	@Override

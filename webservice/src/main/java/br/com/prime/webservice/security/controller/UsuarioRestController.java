@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.commons.entity.Usuario;
-import br.com.prime.webservice.security.JwtTokenUtil;
+import br.com.prime.webservice.security.TokenUtil;
 
 @RestController
-public class UserRestController {
+public class UsuarioRestController {
 
     @Value("${jwt.header}")
     private String tokenHeader;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private TokenUtil tokenUtil;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -27,7 +27,7 @@ public class UserRestController {
     @RequestMapping(value = "user", method = RequestMethod.GET)
     public Usuario buscarUsuarioAutenticado(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
-        String login = jwtTokenUtil.buscarLoginPorToken(token);
+        String login = tokenUtil.buscarLoginPorToken(token);
         Usuario usuario = (Usuario) userDetailsService.loadUserByUsername(login);
         return usuario;
     }

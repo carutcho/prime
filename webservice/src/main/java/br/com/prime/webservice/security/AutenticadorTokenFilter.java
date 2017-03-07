@@ -1,6 +1,7 @@
 package br.com.prime.webservice.security;
 
 import java.io.IOException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+public class AutenticadorTokenFilter extends OncePerRequestFilter {
 
     private final Log logger = LogFactory.getLog(this.getClass());
 
@@ -25,7 +26,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private TokenUtil tokenUtil;
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -33,7 +34,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authToken = request.getHeader(this.tokenHeader);
-        String login = jwtTokenUtil.buscarLoginPorToken(authToken);
+        String login = tokenUtil.buscarLoginPorToken(authToken);
 
         logger.info("checking authentication für user " + login);
 
@@ -41,7 +42,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(login);
 
-            if (jwtTokenUtil.validarToken(authToken, userDetails)) {
+            if (tokenUtil.validarToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 logger.info("Usuario autenticado " + login + ", gerando configurações de segurança");
