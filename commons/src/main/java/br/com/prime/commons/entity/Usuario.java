@@ -18,7 +18,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.prime.commons.data.persistence.Persistent;
-import br.com.prime.commons.utils.PasswordEncoderUtil;
+import br.com.prime.crypto.CryptoBcypt;
+import br.com.prime.crypto.interfaces.Crypto;
 
 @Entity
 public class Usuario implements Persistent, UserDetails{
@@ -101,7 +102,8 @@ public class Usuario implements Persistent, UserDetails{
 	}
 
 	public void setSenha(String senha) {
-		this.senha = PasswordEncoderUtil.encriptar(senha);
+		Crypto bCrypt = new CryptoBcypt();
+		this.senha = bCrypt.encriptarToString(senha);
 	}
 
 	public void setNome(String nome) {

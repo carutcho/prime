@@ -25,6 +25,7 @@
 		<module>data</module>
 		<module>services</module>
 		<module>webservice</module>
+		<module>crypto</module>
 	</modules>
 
 	<dependencies>
