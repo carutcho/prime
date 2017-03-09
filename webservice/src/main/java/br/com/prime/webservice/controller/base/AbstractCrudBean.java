@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
-import br.com.commons.exceptions.ServiceBusinessException;
+import br.com.prime.commons.exceptions.ServiceBusinessException;
 
 public abstract class AbstractCrudBean <P, S> {
 

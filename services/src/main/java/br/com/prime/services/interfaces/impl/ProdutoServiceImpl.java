@@ -3,8 +3,8 @@ package br.com.prime.services.interfaces.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.entity.Produto;
+import br.com.prime.commons.exceptions.ServiceBusinessException;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.interfaces.ProdutoDAO;
 import br.com.prime.services.base.CrudServiceImpl;

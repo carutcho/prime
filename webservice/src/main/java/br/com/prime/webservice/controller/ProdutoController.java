@@ -1,13 +1,19 @@
 package br.com.prime.webservice.controller;
 
+import java.security.KeyPair;
+import java.security.PublicKey;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.entity.Produto;
-import br.com.prime.commons.utils.PasswordEncoderUtil;
+import br.com.prime.commons.exceptions.ServiceBusinessException;
+import br.com.prime.commons.factory.CryptoFactory;
+import br.com.prime.crypto.CryptoRSA;
+import br.com.prime.crypto.enums.TipoCryptoEnum;
+import br.com.prime.crypto.interfaces.Crypto;
 import br.com.prime.services.interfaces.ProdutoService;
 import br.com.prime.webservice.controller.base.AbstractCrudBean;
 
@@ -31,7 +37,18 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 
 	@RequestMapping("/encriptar")
 	public String enciptar(){
-		return PasswordEncoderUtil.encriptar("123");
+		Crypto bcrypt = CryptoFactory.getCrypto(TipoCryptoEnum.BCRYPT);
+		//return bcrypt.encriptarToString("123");
+		
+		Crypto rsaCrypt = CryptoFactory.getCrypto(TipoCryptoEnum.RSA);
+		try {
+			KeyPair par = CryptoRSA.gerarChaves(1024);
+			PublicKey publica = par.getPublic();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+				
+		return null;
 	}
 	
 	@RequestMapping("/produto/incluir")

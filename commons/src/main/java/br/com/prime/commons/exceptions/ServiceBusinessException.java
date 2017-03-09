@@ -1,4 +1,4 @@
-package br.com.commons.exceptions;
+package br.com.prime.commons.exceptions;
 
 public class ServiceBusinessException extends Exception{
 

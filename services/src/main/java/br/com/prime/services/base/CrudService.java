@@ -3,8 +3,8 @@ package br.com.prime.services.base;
 import java.io.Serializable;
 import java.util.Collection;
 
-import br.com.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.data.persistence.Persistent;
+import br.com.prime.commons.exceptions.ServiceBusinessException;
 
 public interface CrudService<T extends Persistent> extends Service {
 

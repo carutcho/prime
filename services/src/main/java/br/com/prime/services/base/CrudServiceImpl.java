@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.data.persistence.Persistent;
+import br.com.prime.commons.exceptions.ServiceBusinessException;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.persistence.CrudDao;
 

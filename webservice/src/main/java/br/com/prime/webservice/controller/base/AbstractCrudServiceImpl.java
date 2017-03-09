@@ -3,7 +3,7 @@ package br.com.prime.webservice.controller.base;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import br.com.commons.exceptions.ServiceBusinessException;
+import br.com.prime.commons.exceptions.ServiceBusinessException;
 
 public abstract class AbstractCrudServiceImpl <P, D> {
 	
