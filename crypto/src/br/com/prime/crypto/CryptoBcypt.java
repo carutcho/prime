@@ -29,4 +29,9 @@ public class CryptoBcypt implements Crypto{
 	public byte[] encriptarToByte(String mensagem, Object key) {
 		return encriptarToByte(mensagem);
 	}
+
+	@Override
+	public String encriptarToString(String texto, Object key) {
+		return encriptarToString(texto);
+	}
 }

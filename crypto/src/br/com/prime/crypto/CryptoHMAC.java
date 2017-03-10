@@ -37,6 +37,10 @@ public class CryptoHMAC implements Crypto{
 		return encriptarToByte(mensagem);
 	}
 	
+	public String encriptarToString(String mensagem, Object secret){
+		return Crypto.toHexString(encriptarToByte(mensagem, secret));
+	}
+	
 	public String encriptarToString(String mensagem){
 		return Crypto.toHexString(encriptarToByte(mensagem));
 	}

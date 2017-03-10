@@ -1,8 +1,5 @@
 package br.com.prime.webservice.controller;
 
-import java.security.KeyPair;
-import java.security.PublicKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,12 +39,10 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 		
 		Crypto rsaCrypt = CryptoFactory.getCrypto(TipoCryptoEnum.RSA);
 		try {
-			KeyPair par = CryptoRSA.gerarChaves(1024);
-			PublicKey publica = par.getPublic();
+			return rsaCrypt.encriptarToString("123", CryptoRSA.gerarChaves(1024).getPublic());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-				
 		return null;
 	}
 	

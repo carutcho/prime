@@ -46,6 +46,10 @@ public class CryptoRSA implements Crypto{
 		return encriptarToByte(texto);
 	}
 	
+	public String encriptarToString(String texto, Object publica){
+		return Crypto.toHexString(encriptarToByte(texto, publica));
+	}
+	
 	public String encriptarToString(String texto){
 		return Crypto.toHexString(encriptarToByte(texto));
 	}
