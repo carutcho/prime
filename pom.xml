@@ -26,6 +26,7 @@
 		<module>services</module>
 		<module>webservice</module>
 		<module>crypto</module>
+		<module>prime-mail</module>
 	</modules>
 
 	<dependencies>
@@ -53,7 +54,7 @@
 			<version>1.2.16</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<!-- Security ======================================= -->
 		
 		<dependency>
