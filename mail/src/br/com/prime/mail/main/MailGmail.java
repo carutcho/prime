@@ -2,8 +2,14 @@ package br.com.prime.mail.main;
 
 import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.Message.RecipientType;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import br.com.prime.mail.config.MailConfig;
 import br.com.prime.mail.interfaces.Mail;
@@ -19,21 +25,8 @@ public class MailGmail extends Mail {
 		setSession();
 	}
 
-	public MailGmail(PasswordAuthentication password) {
-		setConfigGmail();
-		session = Session.getDefaultInstance(props);
-		setSession(password);
-	}
-	
 	public void setConfigGmail() {
-		//props.put("mail.smtp.host", MailConfig.SMTP_GMAIL);
-/*		props.put("mail.smtp.socketFactory.port", MailConfig.SMTP_GMAIL_PORT);
-		props.put("mail.smtp.socketFactory.class", MailConfig.SMTP_GMAIL_SESSION_FACTORY); */
-		
-		props.put("mail.smtp.user", MailConfig.SMTP_GMAIL_USUARIO);
-	    props.put("mail.smtp.password", MailConfig.SMTP_GMAIL_SENHA);
 		props.put("mail.smtp.starttls.enable", MailConfig.SMTP_GMAIL_STARTTLS_ENABLE);
-		props.put("mail.smtp.ssl.trust", MailConfig.SMTP_GMAIL);
 		props.put("mail.smtp.auth", MailConfig.SMTP_GMAIL_AUTH);
 		props.put("mail.smtp.port", MailConfig.SMTP_GMAIL_PORT);
 	}
@@ -47,17 +40,39 @@ public class MailGmail extends Mail {
 		return getSession();
 	}
 	
-	public void setSession(PasswordAuthentication password) {
-		super.session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return password;
-			}
-		});
-		super.session.setDebug(true);		
-	}
+	public void setSession(PasswordAuthentication password) {}
 
 	public void setSession() {
-		setSession(new PasswordAuthentication(MailConfig.SMTP_GMAIL_USUARIO, MailConfig.SMTP_GMAIL_SENHA));		
+		super.session = Session.getDefaultInstance(props, null);
 	}
 
+	public void enviarEmail(Message email) throws MessagingException {
+		
+		email.setFrom(new InternetAddress(MailConfig.SMTP_GMAIL_USUARIO));
+		
+		Transport transport = super.session.getTransport("smtp");
+        transport.connect(MailConfig.SMTP_GMAIL, MailConfig.SMTP_GMAIL_USUARIO, MailConfig.SMTP_GMAIL_SENHA);
+        transport.sendMessage(email, email.getAllRecipients());
+        transport.close();
+	}
+
+	public void enviarEmail(String para, String assunto, String texto, String[] urlArquivo) throws AddressException, MessagingException {
+		Message email = construirEmail(para, assunto, texto, urlArquivo, RecipientType.TO);
+		enviarEmail(email);
+	}
+	
+	public void enviarEmailHTML(String para, String assunto, String html, String[] urlArquivo) throws AddressException, MessagingException {
+		Message email = construirEmailHTML(para, assunto, html, urlArquivo, RecipientType.TO);
+		enviarEmail(email);
+	}
+
+	public void enviarCCoHTML(String para, String assunto, String html, String[] urlArquivo) throws AddressException, MessagingException {
+		Message email = construirEmailHTML(para, assunto, html, urlArquivo, RecipientType.BCC);
+		enviarEmail(email);
+	}
+	
+	public void enviarEmailCCo(String para, String assunto, String texto, String[] urlArquivo) throws AddressException, MessagingException {
+		Message email = construirEmail(para, assunto, texto, urlArquivo, RecipientType.BCC);
+		enviarEmail(email);
+	}
 }

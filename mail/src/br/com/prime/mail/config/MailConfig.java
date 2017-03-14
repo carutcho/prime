@@ -3,7 +3,7 @@ package br.com.prime.mail.config;
 public class MailConfig {
 
 	//CONFIG GMAIL
-	public static final String SMTP_GMAIL_USUARIO = "excursa.teste@gmail.com";
+	public static final String SMTP_GMAIL_USUARIO = "contato.prime.teste@gmail.com";
 	public static final String SMTP_GMAIL_SENHA = "windows98";
 	public static final String SMTP_GMAIL_PORT = "587";
 	public static final String SMTP_GMAIL = "smtp.gmail.com";
