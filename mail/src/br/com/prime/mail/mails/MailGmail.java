@@ -1,4 +1,4 @@
-package br.com.prime.mail.main;
+package br.com.prime.mail.mails;
 
 import java.util.Properties;
 
