@@ -12,6 +12,9 @@
         <dependent-module archiveName="crypto-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/crypto/crypto">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="prime-mail-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/prime-mail/prime-mail">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="services-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/services/services">
             <dependency-type>uses</dependency-type>
         </dependent-module>

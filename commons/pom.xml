@@ -22,6 +22,12 @@
 			<artifactId>crypto</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>br.com.prime</groupId>
+			<artifactId>prime-mail</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
