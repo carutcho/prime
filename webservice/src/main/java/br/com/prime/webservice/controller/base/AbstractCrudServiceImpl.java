@@ -3,6 +3,9 @@ package br.com.prime.webservice.controller.base;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import br.com.prime.commons.exceptions.ServiceBusinessException;
 
 public abstract class AbstractCrudServiceImpl <P, D> {
@@ -15,6 +18,8 @@ public abstract class AbstractCrudServiceImpl <P, D> {
 	
 	private Class<P> persistentClass;
 	
+	protected Logger log = LoggerFactory.getLogger(getClass());
+	
 	@SuppressWarnings("unchecked")
 	public AbstractCrudServiceImpl(D dao){
 		this.dao = dao;
@@ -25,12 +30,12 @@ public abstract class AbstractCrudServiceImpl <P, D> {
 
 		try {
             entity = persistentClass.newInstance();
-        } catch (InstantiationException e) {
+        } catch (InstantiationException e) {        	
+        	log.error("metodo: entityNewInstance - [Sem entidade] - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
             throw new ServiceBusinessException("Falha interna, procure um administrador");
-            //TODO: LOG
         } catch (IllegalAccessException e) {
+        	log.error("metodo: entityNewInstance - [Sem entidade] - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
         	throw new ServiceBusinessException("Falha interna, procure um administrador");
-            //TODO: LOG
         }
     }
 

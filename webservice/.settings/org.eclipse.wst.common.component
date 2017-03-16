@@ -6,19 +6,19 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-        <dependent-module archiveName="commons-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/commons/commons">
+        <dependent-module archiveName="prime-commons-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/prime-commons/prime-commons">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="crypto-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/crypto/crypto">
+        <dependent-module archiveName="prime-crypto-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/prime-crypto/prime-crypto">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="prime-mail-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/prime-mail/prime-mail">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="services-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/services/services">
+        <dependent-module archiveName="prime-services-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/prime-services/prime-services">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="data-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/data/data">
+        <dependent-module archiveName="prime-data-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/prime-data/prime-data">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="webservice"/>

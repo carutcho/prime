@@ -29,7 +29,7 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
+		<!-- Modulos spring =================================================== -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -52,7 +52,7 @@
 			<artifactId>spring-mobile-device</artifactId>
 			<version>1.1.5.RELEASE</version>
 		</dependency>
-
+		<!-- Modulos web =================================================== -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -77,16 +77,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<!-- Modulos prime =================================================== -->
 		<dependency>
 			<groupId>br.com.prime</groupId>
-			<artifactId>commons</artifactId>
+			<artifactId>prime-commons</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>br.com.prime</groupId>
-			<artifactId>services</artifactId>
+			<artifactId>prime-services</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>

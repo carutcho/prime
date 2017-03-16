@@ -18,15 +18,17 @@
 		<spring.security.version>4.0.4.RELEASE</spring.security.version>
 		<spring.security.oauth2.version>2.0.12.RELEASE</spring.security.oauth2.version>
 		<slf4j.version>1.6.1</slf4j.version>
+		<org.hibernate.hibernate-validator.version>5.4.0.Final</org.hibernate.hibernate-validator.version>
+		<jackson.databind.version>2.8.7</jackson.databind.version>
 	</properties>
 
 	<modules>
-		<module>commons</module>
-		<module>data</module>
-		<module>services</module>
-		<module>webservice</module>
-		<module>crypto</module>
+		<module>prime-crypto</module>
 		<module>prime-mail</module>
+		<module>prime-commons</module>
+		<module>prime-data</module>
+		<module>prime-services</module>
+		<module>webservice</module>
 	</modules>
 
 	<dependencies>
@@ -81,6 +83,26 @@
 		    <groupId>org.springframework.security.oauth</groupId>
 		    <artifactId>spring-security-oauth2</artifactId>
 		    <version>${spring.security.oauth2.version}</version>
+		</dependency>
+		
+		<!-- Json ========================================================= -->		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>${jackson.databind.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>${jackson.databind.version}</version>
+		</dependency>
+		
+		<!-- Validation =================================================== -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${org.hibernate.hibernate-validator.version}</version>
 		</dependency>
 	</dependencies>
 </project>
