@@ -10,10 +10,11 @@ import org.springframework.core.env.Environment;
 
 import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.commons.exceptions.ServiceBusinessException;
+import br.com.prime.commons.utils.GeradorMensagensRetorno;
 import br.com.prime.services.base.CrudService;
 import br.com.prime.services.base.Service;
 
-public abstract class AbstractCrudBean <P, S> {
+public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 
 	
 	@Autowired
@@ -123,4 +124,5 @@ public abstract class AbstractCrudBean <P, S> {
 	public P listar(P entity) throws ServiceBusinessException {
 		return (P) ((CrudService<Persistent>) service).buscarTodosOrdenados("id", true);
 	}
+		
 }
