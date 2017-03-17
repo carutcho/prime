@@ -1,18 +1,23 @@
 package br.com.prime.webservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.commons.entity.Produto;
-import br.com.prime.commons.enums.CodigosResponseEnum;
 import br.com.prime.commons.exceptions.ServiceBusinessException;
 import br.com.prime.services.interfaces.ProdutoService;
 import br.com.prime.webservice.controller.base.AbstractCrudBean;
 
 @RestController
 @Transactional
+@RequestMapping(value = "/produto/", headers = "Accept=application/json", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>  {
 
 	private Produto produto;
@@ -22,51 +27,56 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 		super(service);
 	}
 
-	@RequestMapping("/produto/buscar")
-	public String buscarProduto(){
+	@RequestMapping(value = "/buscar/{id}", method = RequestMethod.GET)
+	public ResponseEntity<String> buscarProduto(@PathVariable("id") long id){
 		try {
-			return respostaSucesso(super.buscarPorId(1L));
+			return respostaSucesso(super.buscarPorId(id));
 		} catch (ServiceBusinessException e) {
-			return respostaErro(getProperties().getProperty("msg.erro.produto.consultar"));
+			return respostaErro(e.getMessage());
 		}
 	}
 
-	@RequestMapping("/produto/inserir")
-	public String inserirProduto(){
+	@RequestMapping(value = "/inserir", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<String> inserirProduto(){
 		try {		
 			produto = gerarProduto();
 			super.inserir(produto);
-			return respostaSucesso(CodigosResponseEnum.CREATED, getProperties().getProperty("msg.sucesso.produto.inserir"));
+			return respostaSucesso(HttpStatus.CREATED, getProperties().getProperty("msg.sucesso.produto.inserir"));
 		} catch (ServiceBusinessException e) {
-			return respostaErro(getProperties().getProperty("msg.erro.produto.inserir"));
+			return respostaErro(e.getMessage());
 		}
 	}
 
-	@RequestMapping("/produto/remover")
-	public String remover(){
+	@RequestMapping(value = "/remover", method=RequestMethod.DELETE)
+	public ResponseEntity<String> remover(){
 		try {				
 			super.remover(produto.getId());
-			return respostaSucesso(CodigosResponseEnum.NOCONTENT, getProperties().getProperty("msg.sucesso.produto.inserir"));
+			return respostaSucesso(HttpStatus.NO_CONTENT, getProperties().getProperty("msg.sucesso.produto.remover"));
 		} catch (ServiceBusinessException e) {
-			return respostaErro(getProperties().getProperty("msg.erro.produto.inserir"));
+			return respostaErro(e.getMessage());
 		}
 	}
 	
-	@RequestMapping("/produto/atualizar")
-	public String atualizar(){
+	@RequestMapping(value = "/atualizar", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<String> atualizar(){
 		try {		
 			produto = gerarProduto();
 			produto = super.atualzar(produto);
-			return respostaSucesso(CodigosResponseEnum.OK, getProperties().getProperty("msg.sucesso.produto.inserir"));
+			return respostaSucesso(HttpStatus.OK, getProperties().getProperty("msg.sucesso.produto.atualizar"));
 		} catch (ServiceBusinessException e) {
-			return respostaErro(getProperties().getProperty("msg.erro.produto.inserir"));
+			return respostaErro(getProperties().getProperty(e.getMessage()));
 		}			
 		
 	}
 	
-	@RequestMapping("/produto/listar")
-	public String listar(){
-		return respostaSucesso(super.getEntityList());
+	@RequestMapping(value = "/listar", method=RequestMethod.GET)
+	public ResponseEntity<String> listar(){
+		produto = gerarProduto();
+		try {
+			return respostaSucesso(super.listar(produto));
+		} catch (ServiceBusinessException e) {
+			return respostaErro(e.getMessage());
+		}
 	}
 
 	//TODO: abstrair por entidade !!!! buscar o conversor de entidade que o sergio sugeriu, fazer uma abstração 

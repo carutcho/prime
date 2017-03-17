@@ -9,8 +9,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import br.com.prime.commons.data.persistence.Persistent;
 
 @Entity
@@ -88,12 +86,5 @@ public class Produto implements Persistent{
 		return null;
 	}
 	
-	public String toString(){
-		try {			
-			return mapper.writeValueAsString("["+getLabel()+"]"+ this);
-		} catch (JsonProcessingException e) {
-			return null;
-		}
-	}
 	
 }

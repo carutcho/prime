@@ -12,8 +12,6 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import br.com.prime.commons.data.persistence.Persistent;
 
 @Entity
@@ -127,12 +125,5 @@ public class Perfil implements Persistent, GrantedAuthority{
 		return sigla;
 	}
 
-	public String toString(){
-		try {			
-			return mapper.writeValueAsString("["+getLabel()+"]"+ this);
-		} catch (JsonProcessingException e) {
-			return null;
-		}
-	}
 	
 }

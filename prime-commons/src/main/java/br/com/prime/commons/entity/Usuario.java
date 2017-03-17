@@ -17,8 +17,6 @@ import javax.persistence.SequenceGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.crypto.CryptoBcypt;
 import br.com.prime.crypto.interfaces.Crypto;
@@ -218,11 +216,4 @@ public class Usuario implements Persistent, UserDetails, Cloneable{
 		
 	}
 	
-	public String toString(){
-		try {			
-			return mapper.writeValueAsString("["+getLabel()+"]"+ this.clone());
-		} catch (JsonProcessingException e) {
-			return null;
-		}
-	}
 }
