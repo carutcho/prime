@@ -82,10 +82,10 @@ public class GeradorMensagensRetorno {
 
 	protected ResponseEntity<String> respostaSucesso(HttpStatus codigo, String mensagem, Object retorno) {
 		String mensagemRetorno = null;
-		Collection<Object> erro = new ArrayList<Object>();
-		erro.add(retorno);
+		Collection<Object> objRetorno = new ArrayList<Object>();
+		objRetorno.add(retorno);
 		try {
-			mensagemRetorno = mapper.writeValueAsString(new RespostaPadraoJson(codigo, mensagem, erro));
+			mensagemRetorno = mapper.writeValueAsString(new RespostaPadraoJson(codigo, mensagem, objRetorno));
 		} catch (JsonProcessingException e) {}
 		
 		return ResponseEntity.status(codigo).body(mensagemRetorno);

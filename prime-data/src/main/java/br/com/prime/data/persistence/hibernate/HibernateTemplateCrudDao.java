@@ -14,6 +14,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,12 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 		return findByCriteria();
 	}
 
+	@SuppressWarnings("unchecked")
+	public T buscarPorId(Long id) {
+		Criteria criteria = getSession().createCriteria(getPersistentClass()).add(Restrictions.eqOrIsNull("id", id));		
+		return (T) criteria.uniqueResult();
+	}
+		
 	@SuppressWarnings("unchecked")
 	public List<T> buscarTodosOrdenados(String campo, Boolean ordem) {
 		Criteria criteria = getSession().createCriteria(getPersistentClass());

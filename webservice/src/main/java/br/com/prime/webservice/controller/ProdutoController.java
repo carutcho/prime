@@ -20,8 +20,8 @@ import br.com.prime.webservice.controller.base.AbstractCrudBean;
 @RequestMapping(value = "/produto/", headers = "Accept=application/json", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>  {
 
-	private Produto produto;
 
+	
 	@Autowired
 	public ProdutoController(ProdutoService service) {
 		super(service);
@@ -39,18 +39,18 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 	@RequestMapping(value = "/inserir", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<String> inserirProduto(){
 		try {		
-			produto = gerarProduto();
-			super.inserir(produto);
+			setEntity(gerarProduto());
+			super.inserir(getEntity());
 			return respostaSucesso(HttpStatus.CREATED, getProperties().getProperty("msg.sucesso.produto.inserir"));
 		} catch (ServiceBusinessException e) {
 			return respostaErro(e.getMessage());
 		}
 	}
 
-	@RequestMapping(value = "/remover", method=RequestMethod.DELETE)
-	public ResponseEntity<String> remover(){
+	@RequestMapping(value = "/remover/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<String> removerProduto(@PathVariable("id") long id){
 		try {				
-			super.remover(produto.getId());
+			super.remover(id);
 			return respostaSucesso(HttpStatus.NO_CONTENT, getProperties().getProperty("msg.sucesso.produto.remover"));
 		} catch (ServiceBusinessException e) {
 			return respostaErro(e.getMessage());
@@ -58,11 +58,10 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 	}
 	
 	@RequestMapping(value = "/atualizar", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<String> atualizar(){
+	public ResponseEntity<String> atualizarProduto(){
 		try {		
-			produto = gerarProduto();
-			produto = super.atualzar(produto);
-			return respostaSucesso(HttpStatus.OK, getProperties().getProperty("msg.sucesso.produto.atualizar"));
+			setEntity(gerarProduto());
+			return respostaSucesso(HttpStatus.OK, getProperties().getProperty("msg.sucesso.produto.atualizar"), super.atualizar(getEntity()));
 		} catch (ServiceBusinessException e) {
 			return respostaErro(getProperties().getProperty(e.getMessage()));
 		}			
@@ -70,10 +69,9 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 	}
 	
 	@RequestMapping(value = "/listar", method=RequestMethod.GET)
-	public ResponseEntity<String> listar(){
-		produto = gerarProduto();
+	public ResponseEntity<String> listarProduto(){		
 		try {
-			return respostaSucesso(super.listar(produto));
+			return respostaSucesso(super.listar());
 		} catch (ServiceBusinessException e) {
 			return respostaErro(e.getMessage());
 		}

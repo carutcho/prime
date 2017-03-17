@@ -1,7 +1,9 @@
 package br.com.prime.webservice.controller.base;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.List;
+import java.util.Collection;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,17 +28,25 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 	
 	private P entity;
 	
-	private List<P> entityList;
+	private Collection<P> entityList;
 	
 	private Class<P> persistentClass;
 	
 	protected Logger log = LoggerFactory.getLogger(getClass());
 	
+
 	@SuppressWarnings("unchecked")
 	public AbstractCrudBean(S service){
 		this.service = service;
 		this.servico = (Service) service;
 		this.persistentClass = (Class<P>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+	
+	@PostConstruct
+	protected void initAbstract(){
+		try {
+			entityNewInstance();
+		} catch (ServiceBusinessException e) {}
 	}
 	
 	protected void entityNewInstance() throws ServiceBusinessException {
@@ -62,11 +72,11 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		this.entity = entity;
 	}
 
-	public List<P> getEntityList() {
-		return entityList;
+	public Collection<P> getEntityList() throws ServiceBusinessException {
+		return listar(getEntity());
 	}
 
-	public void setEntityList(List<P> entityList) {
+	public void setEntityList(Collection<P> entityList) {
 		this.entityList = entityList;
 	}
 
@@ -90,14 +100,13 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		this.properties = properties;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void inserir() throws ServiceBusinessException{
-		((CrudService<Persistent>) servico).inserir((Persistent) entity);
+		this.inserir(getEntity());
 	}
 
+	@SuppressWarnings("unchecked")
 	public void inserir(P entity) throws ServiceBusinessException {
-		setEntity(entity);
-		this.inserir();
+		((CrudService<Persistent>) servico).inserir((Persistent) entity);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -109,20 +118,31 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 	public void remover(Long id) throws ServiceBusinessException {
 		((CrudService<Persistent>) servico).remover(id);
 	}
+	
+	public void remover() throws ServiceBusinessException {
+		remover(getEntity());
+	}
 
 	@SuppressWarnings("unchecked")
 	public void remover(P entity) throws ServiceBusinessException {
 		((CrudService<Persistent>) servico).remover((Persistent) entity);
 	}
 
+	public P atualizar() throws ServiceBusinessException {
+		return atualizar(getEntity());
+	}
+	
 	@SuppressWarnings("unchecked")
-	public P atualzar(P entity) throws ServiceBusinessException {
+	public P atualizar(P entity) throws ServiceBusinessException {
 		return (P) ((CrudService<Persistent>) servico).atualizar((Persistent) entity);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public P listar(P entity) throws ServiceBusinessException {
-		return (P) ((CrudService<Persistent>) service).buscarTodosOrdenados("id", true);
+	public Collection<P> listar(P entity) throws ServiceBusinessException {
+		return (Collection<P>) ((CrudService<Persistent>) service).buscarTodosOrdenados("id", true);
 	}
-		
+	
+	public Collection<P> listar() throws ServiceBusinessException {
+		return listar(getEntity());
+	}
 }

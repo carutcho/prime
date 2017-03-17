@@ -64,8 +64,8 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
         }
 	}
 
-    public Collection<T> buscarTodosOrdenados(String posicaoInicial, Boolean quantidadeRegistros){
-        return dao.buscarTodosOrdenados(posicaoInicial, quantidadeRegistros);
+    public Collection<T> buscarTodosOrdenados(String campo, Boolean quantidadeRegistros){
+        return dao.buscarTodosOrdenados(campo, quantidadeRegistros);
     }
 
     public Collection<T> buscarPorRange(final int posicaoInicial, final int quantidadeRegistros) throws ServiceBusinessException {
