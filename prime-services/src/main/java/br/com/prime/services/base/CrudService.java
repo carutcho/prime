@@ -12,7 +12,7 @@ public interface CrudService<T extends Persistent> extends Service {
 
     public abstract void validar(T entity) throws ServiceBusinessException;
 
-    public abstract void inserir(T entity) throws ServiceBusinessException;
+    public abstract T inserir(T entity) throws ServiceBusinessException;
 
     public abstract T atualizar(T entity) throws ServiceBusinessException;
 

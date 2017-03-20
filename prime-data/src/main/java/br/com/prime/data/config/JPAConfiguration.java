@@ -19,7 +19,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-@PropertySource(value ="classpath:db-config.properties")
+@PropertySource(value ={"classpath:db-config.properties","classpath:messages_data_pt_BR.properties"})
 @Configuration
 @EnableTransactionManagement
 public class JPAConfiguration {

@@ -9,8 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.prime.commons.data.persistence.Persistent;
+import br.com.prime.commons.entity.Produto;
 import br.com.prime.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.utils.GeradorMensagensRetorno;
 import br.com.prime.services.base.CrudService;
@@ -64,6 +72,7 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
         }
     }
 
+	//TODO: validar a necessidade de entity e entityList
 	public P getEntity() {
 		return entity;
 	}
@@ -100,13 +109,22 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		this.properties = properties;
 	}
 	
-	public void inserir() throws ServiceBusinessException{
-		this.inserir(getEntity());
+	public P inserir() throws ServiceBusinessException{
+		return this.inserir(getEntity());
 	}
 
 	@SuppressWarnings("unchecked")
-	public void inserir(P entity) throws ServiceBusinessException {
-		((CrudService<Persistent>) servico).inserir((Persistent) entity);
+	public P inserir(@RequestBody P entity) throws ServiceBusinessException {
+		try {								
+			return (P) respostaSucesso(HttpStatus.CREATED, getProperties().getProperty("msg.sucesso.produto.inserir"), insertPersistent(entity));
+		} catch (ServiceBusinessException e) {
+			return (P) respostaErro(e.getMessage());
+		}		
+	}
+
+	@SuppressWarnings("unchecked")
+	private P insertPersistent(P entity) throws ServiceBusinessException {
+		return (P) ((CrudService<Persistent>) servico).inserir((Persistent) entity);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,21 +137,38 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		((CrudService<Persistent>) servico).remover(id);
 	}
 	
-	public void remover() throws ServiceBusinessException {
-		remover(getEntity());
+	@RequestMapping(value = "/remover/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<String> remover(@PathVariable("id") long id){
+		try {				
+			removerPersistent(id);
+			return respostaSucesso(HttpStatus.NO_CONTENT, getProperties().getProperty("msg.sucesso.generica.remover"));
+		} catch (ServiceBusinessException e) {
+			return respostaErro(e.getMessage());
+		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public void remover(P entity) throws ServiceBusinessException {
+	@SuppressWarnings({ "unused", "unchecked" })
+	private void removerPersistent(P entity) throws ServiceBusinessException {
 		((CrudService<Persistent>) servico).remover((Persistent) entity);
-	}
-
-	public P atualizar() throws ServiceBusinessException {
-		return atualizar(getEntity());
 	}
 	
 	@SuppressWarnings("unchecked")
-	public P atualizar(P entity) throws ServiceBusinessException {
+	private void removerPersistent(Long id) throws ServiceBusinessException {
+		((CrudService<Persistent>) servico).remover(id);
+	}
+	
+
+	@RequestMapping(value = "/atualizar", method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<String> atualizarProduto(@RequestBody P produto){
+		try {					
+			return respostaSucesso(HttpStatus.OK, getProperties().getProperty("msg.sucesso.produto.atualizar"), atualizarPersistent(produto));
+		} catch (ServiceBusinessException e) {
+			return respostaErro(e.getMessages());
+		}			
+	}
+	
+	@SuppressWarnings("unchecked")
+	public P atualizarPersistent(P entity) throws ServiceBusinessException {
 		return (P) ((CrudService<Persistent>) servico).atualizar((Persistent) entity);
 	}
 	

@@ -65,40 +65,48 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 		return manager.unwrap(Session.class);
 	}
 
-	public void validar(T entity) throws PersistenceValidateException {
+	public void validarInseir(T entity) throws PersistenceValidateException {
 		T entidade = buscarPorId(entity.getId());
 		if (entidade != null){			
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_REGSTRO_EXISTENTE));			
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_REGSTRO_EXISTENTE), null);			
 		}
 	}
 
-	public void inserir(T entity) throws PersistenceValidateException {
+	public void validarAtualizar(T entity) throws PersistenceValidateException {
+		T entidade = buscarPorId(entity.getId());
+		if (entidade == null){			
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR), null);			
+		}
+	}
+	
+	public T inserir(T entity) throws PersistenceValidateException {
 		try {
-			validar(entity);
+			validarInseir(entity);
 			getSession().save(entity);
+			return buscarPorId(entity.getId());
 		} catch (PersistenceValidateException e) {
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR), e.getCause());
 		} catch (org.springframework.dao.DataAccessException e) {
 			log.warn(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR) + entity);
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR), e.getCause());
 		} catch (Exception e) {
 			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR) + entity + e.getCause());
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_INSERIR), e.getCause());
 		}
 	}
 
 	public void atualizar(T entity) throws PersistenceValidateException {
 		try {
-			validar(entity);
+			validarAtualizar(entity);
 			getSession().merge(entity);
 		} catch (PersistenceValidateException e) {
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR), e.getCause());
 		} catch (org.springframework.dao.DataAccessException e) {
 			log.warn(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR) + entity);
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR), e.getCause());
 		} catch (Exception e) {
 			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR) + entity + e.getCause());
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_ATUALIZAR), e.getCause());
 		}
 	}
 
@@ -109,7 +117,7 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 		} catch (org.springframework.dao.DataAccessException e) {
 			//TODO: verificar se data acess é questao de acesso a busca (permissao de usuario, caso seja ajusta a menagem de erro)
 			log.warn(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA) + id);
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA), e.getCause());
 		}
 	}
 
@@ -122,7 +130,7 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 			return (result != null) ? result.intValue() : 0;
 		} catch (Exception e) {
 			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA) + e.getCause());
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA), e.getCause());
 		}
 	}
 
@@ -222,10 +230,10 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 			getSession().delete(entity);
 		} catch (org.springframework.dao.DataAccessException e) {
 			log.warn(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER) + entity);
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER), e.getCause());
 		} catch (Exception e) {
 			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER) + entity + e.getCause());
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER), e.getCause());
 		}
 	}
 
@@ -276,10 +284,10 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 		List<T> result = null;
 
 		if (firstResult < 0) {
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_PARAMENTO_MENOR_ZERO));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_PARAMENTO_MENOR_ZERO), null);
 		}
 		if (maxResults < 0) {
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_PARAMENTO_MENOR_ZERO));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_PARAMENTO_MENOR_ZERO), null);
 		}
 
 		try {
@@ -291,7 +299,7 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 			result = executeCriteria(firstResult, maxResults, criteria);
 		} catch (Exception e) {
 			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER) + e.getCause());
-			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER));
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_REMOVER), e.getCause());
 		}
 
 		return result;

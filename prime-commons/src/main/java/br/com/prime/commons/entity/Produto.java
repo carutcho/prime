@@ -7,7 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.prime.commons.data.persistence.Persistent;
 
@@ -22,10 +23,11 @@ public class Produto implements Persistent{
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 	
-	@NotNull
+	@NotEmpty
 	@Column(name="nome")
 	private String nome;
 	
+	@NotEmpty
 	@Column(name="descricao")
     private String descricao;
     

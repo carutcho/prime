@@ -16,6 +16,21 @@ public class GeradorMensagensRetorno {
 
 	ObjectWriter mapper = new ObjectMapper().writerWithDefaultPrettyPrinter();
 
+	protected ResponseEntity<String> respostaErro(Collection<String> mensagens) {
+		
+		String mensagemRetorno = null;
+		RespostaPadraoJson response = new RespostaPadraoJson(HttpStatus.BAD_REQUEST);
+		response.setMensagem(mensagens);
+		
+		try {
+			mensagemRetorno = mapper.writeValueAsString(response);
+		} catch (JsonProcessingException e) {
+			mensagemRetorno = null;
+		}
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagemRetorno);
+	}
+	
 	protected ResponseEntity<String> respostaErro(String mensagem) {
 		String mensagemRetorno = null;
 		try {
@@ -23,9 +38,24 @@ public class GeradorMensagensRetorno {
 		} catch (JsonProcessingException e) {
 			mensagemRetorno = null;
 		}
+		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagemRetorno);
 	}
 
+	protected ResponseEntity<String> respostaErro(HttpStatus codigo, Collection<String> mensagens) {
+		String mensagemRetorno = null;
+		RespostaPadraoJson response = new RespostaPadraoJson(codigo);
+		response.setMensagem(mensagens);
+		
+		try {
+			mensagemRetorno = mapper.writeValueAsString(response);
+		} catch (JsonProcessingException e) {
+			mensagemRetorno = null;
+		}
+		
+		return ResponseEntity.status(codigo).body(mensagemRetorno);
+	}
+	
 	protected ResponseEntity<String> respostaErro(HttpStatus codigo, String mensagem) {
 		String mensagemRetorno = null;
 		try {
@@ -40,6 +70,7 @@ public class GeradorMensagensRetorno {
 		try {
 			mensagemRetorno = mapper.writeValueAsString(new RespostaPadraoJson(codigo, mensagem));
 		} catch (JsonProcessingException e) {}
+		
 		return ResponseEntity.status(codigo).body(mensagemRetorno);
 	}
 
@@ -48,6 +79,7 @@ public class GeradorMensagensRetorno {
 		try {
 			mensagemRetorno = mapper.writeValueAsString(new RespostaPadraoJson(HttpStatus.OK, mensagem));
 		} catch (JsonProcessingException e) { }
+		
 		return ResponseEntity.status(HttpStatus.OK).body(mensagemRetorno);
 	}
 
@@ -58,6 +90,7 @@ public class GeradorMensagensRetorno {
 		try {
 			mensagemRetorno = mapper.writeValueAsString(new RespostaPadraoJson(HttpStatus.OK, objRetorno));
 		} catch (JsonProcessingException e) { }
+		
 		return ResponseEntity.status(HttpStatus.OK).body(mensagemRetorno);
 	}
 
@@ -66,6 +99,7 @@ public class GeradorMensagensRetorno {
 		try {
 			mensagemRetorno = mapper.writeValueAsString(new RespostaPadraoJson(HttpStatus.OK, retorno));
 		} catch (JsonProcessingException e) {}
+		
 		return ResponseEntity.status(HttpStatus.OK).body(mensagemRetorno);
 	}
 

@@ -1,7 +1,9 @@
 package br.com.prime.commons.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
@@ -11,7 +13,7 @@ public class RespostaPadraoJson implements Serializable {
 
 	private HttpStatus codigo;
 	private Collection<Object> retorno;
-	private String mensagem;
+	private Collection<String> mensagens;
 	
 	public RespostaPadraoJson(HttpStatus codigo) {
 		this.codigo = codigo;
@@ -19,13 +21,19 @@ public class RespostaPadraoJson implements Serializable {
 	
 	public RespostaPadraoJson(HttpStatus codigo, String mensagem) {
 		this.codigo = codigo;
-		this.mensagem = mensagem;
+		this.mensagens = gerarMensagem(mensagem);
 	}
 	
 	public RespostaPadraoJson(HttpStatus codigo, String mensagem, Collection<Object> retorno) {
 		this.codigo = codigo;
-		this.mensagem = mensagem;
+		this.mensagens = gerarMensagem(mensagem);
 		this.retorno = retorno;
+	}
+	
+	private List<String> gerarMensagem(String mensagem){
+		List<String> mensagens = new ArrayList<String>();
+		mensagens.add(mensagem);
+		return mensagens;
 	}
 	
 	public RespostaPadraoJson(HttpStatus codigo, Collection<Object> retorno) {
@@ -49,11 +57,11 @@ public class RespostaPadraoJson implements Serializable {
 		this.codigo = codigo;
 	}
 
-	public String getMensagem() {
-		return mensagem;
+	public Collection<String> getMensagens() {
+		return mensagens;
 	}
 
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
+	public void setMensagem(Collection<String> mensagens) {
+		this.mensagens = mensagens;
 	}
 }

@@ -42,7 +42,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
         	}else{
         		log.error("metodo: totalregistros - [entidade nula] - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
         	}
-			throw new ServiceBusinessException(e.getMessages());
+			throw new ServiceBusinessException(e.getMessage());
 		}
 	}
 
@@ -51,7 +51,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 			dao.remover(id);
 		} catch (PersistenceValidateException e) {
 			log.error("metodo: remover - id: [" + id + "] - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
-			throw new ServiceBusinessException(e.getMessages());
+			throw new ServiceBusinessException(e.getMessage());
 		}
 	}
 
@@ -60,7 +60,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 	        return dao.listarTodos();
         } catch (PersistenceValidateException e) {
         	log.error("metodo: listarTodos - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
-            throw new ServiceBusinessException(e.getMessages());
+            throw new ServiceBusinessException(e.getMessage());
         }
 	}
 
@@ -86,7 +86,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 			return dao.totalRegistros();
 		} catch (PersistenceValidateException e) {
 			log.error("metodo: totalregistros - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
-			throw new ServiceBusinessException(e.getMessages());
+			throw new ServiceBusinessException(e.getMessage());
 		}
 	}
 
@@ -95,7 +95,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 	        return dao.buscarPorId(id);
         } catch (PersistenceValidateException e) {
         	log.error("metodo: buscarPorId - id: " + id + " - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
-            throw new ServiceBusinessException(e.getMessages());
+            throw new ServiceBusinessException(e.getMessage());
         }
 	}
 
@@ -104,16 +104,16 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 	}
 
     @Transactional
-    public void inserir(T entity) throws ServiceBusinessException {
+    public T inserir(T entity) throws ServiceBusinessException {
         try {
-            dao.inserir(entity);
+            return dao.inserir(entity);
         } catch (PersistenceValidateException e) {
         	if (entity != null){
         		log.error("metodo: inserir - " + entity.toString() + " - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
         	}else{
         		log.error("metodo: totalregistros - [entidade nula] - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
         	}
-            throw new ServiceBusinessException(e.getMessages());
+            throw new ServiceBusinessException(e.getMessage());
         }
     }
 
@@ -130,7 +130,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
         	}else{
         		log.error("metodo: totalregistros - [entidade nula] - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
         	}
-            throw new ServiceBusinessException(e.getMessages());
+            throw new ServiceBusinessException(e.getMessage());
         }
     }
 

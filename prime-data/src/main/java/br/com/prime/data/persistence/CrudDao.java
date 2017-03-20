@@ -10,9 +10,11 @@ public interface CrudDao<T extends Persistent> extends Serializable {
 
     public abstract Class<T> getPersistentClass();
 
-    public abstract void validar(T entity) throws PersistenceValidateException;
+    public abstract void validarInseir(T entity) throws PersistenceValidateException;
+    
+    public abstract void validarAtualizar(T entity) throws PersistenceValidateException;
 
-    public abstract void inserir(T entity) throws PersistenceValidateException;
+    public abstract T inserir(T entity) throws PersistenceValidateException;
 
     public abstract void atualizar(T entity) throws PersistenceValidateException;
 
