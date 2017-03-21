@@ -1,6 +1,5 @@
 package br.com.prime.data.persistence.hibernate;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.persistence.CrudDao;
 
+@Transactional
 public abstract class HibernateTemplateCrudDao<T extends Persistent> implements CrudDao<T>{
 
 	private static final long serialVersionUID = 7815903224454495303L;
@@ -37,7 +37,7 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 	private static final String MSG_ERRO_GENERICA_REGSTRO_EXISTENTE = "msg.erro.generica.regstro.existente";
 	private static final String MSG_ERRO_GENERICA_FALHA_INSERIR 	= "msg.erro.generica.falha.inserir";
 	private static final String MSG_ERRO_GENERICA_FALHA_REMOVER 	= "msg.erro.generica.falha.remover";
-	private static final String MSG_ERRO_GENERICA_FALHA_ATUALIZAR 	= "msg.erro.generica.falha.remover";
+	private static final String MSG_ERRO_GENERICA_FALHA_ATUALIZAR 	= "msg.erro.generica.falha.atualizar";
 	private static final String MSG_ERRO_PARAMENTO_MENOR_ZERO		= "msg.erro.generica.paramento.menor.zero";
 
 	@Autowired
@@ -110,16 +110,16 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public T buscarPorId(Serializable id) throws PersistenceValidateException {
 		try {
-			return (T) getSession().get(persistentClass, id);
+			return (T) getSession().buscarPorId(id);
 		} catch (org.springframework.dao.DataAccessException e) {
 			//TODO: verificar se data acess é questao de acesso a busca (permissao de usuario, caso seja ajusta a menagem de erro)
 			log.warn(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA) + id);
 			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA), e.getCause());
 		}
-	}
+	}*/
 
 	public Integer totalRegistros() throws PersistenceValidateException {
 		try {
@@ -139,22 +139,33 @@ public abstract class HibernateTemplateCrudDao<T extends Persistent> implements 
 	}
 
 	@SuppressWarnings("unchecked")
-	public T buscarPorId(Long id) {
-		Criteria criteria = getSession().createCriteria(getPersistentClass()).add(Restrictions.eqOrIsNull("id", id));		
-		return (T) criteria.uniqueResult();
+	public T buscarPorId(Long id) throws PersistenceValidateException {
+		try {
+			Criteria criteria = getSession().createCriteria(getPersistentClass()).add(Restrictions.eqOrIsNull("id", id));
+			return (T) criteria.uniqueResult();
+		} catch (Exception e) {
+			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA) + e.getCause());
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA), e.getCause());
+		}
 	}
 		
 	@SuppressWarnings("unchecked")
-	public List<T> buscarTodosOrdenados(String campo, Boolean ordem) {
-		Criteria criteria = getSession().createCriteria(getPersistentClass());
-		if (campo != null) {
-			if (ordem) {
-				criteria.addOrder(Order.asc(campo));
-			} else {
-				criteria.addOrder(Order.desc(campo));
+	public List<T> buscarTodosOrdenados(String campo, Boolean ordem) throws PersistenceValidateException {
+		try {
+			Criteria criteria = getSession().createCriteria(getPersistentClass());
+			if (campo != null) {
+				if (ordem) {
+					criteria.addOrder(Order.asc(campo));
+				} else {
+					criteria.addOrder(Order.desc(campo));
+				}
 			}
+			
+			return criteria.list();
+		} catch (Exception e) {
+			log.error(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA) + e.getCause());
+			throw new PersistenceValidateException(ev.getProperty(MSG_ERRO_GENERICA_FALHA_GENERICA), e.getCause());
 		}
-		return criteria.list();
 	}
 
 	public List<T> buscarPorRange(int posicaoInicial, int quantidadeRegistros) throws PersistenceValidateException {

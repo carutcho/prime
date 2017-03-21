@@ -1,6 +1,5 @@
 package br.com.prime.services.base;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -64,8 +63,14 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
         }
 	}
 
-    public Collection<T> buscarTodosOrdenados(String campo, Boolean quantidadeRegistros){
-        return dao.buscarTodosOrdenados(campo, quantidadeRegistros);
+    public Collection<T> buscarTodosOrdenados(String campo, Boolean quantidadeRegistros) throws ServiceBusinessException{
+       
+    	try {
+    		 return dao.buscarTodosOrdenados(campo, quantidadeRegistros);
+ 		} catch (PersistenceValidateException e) {
+ 			log.error("metodo: totalregistros - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
+ 			throw new ServiceBusinessException(e.getMessage());
+ 		}
     }
 
     public Collection<T> buscarPorRange(final int posicaoInicial, final int quantidadeRegistros) throws ServiceBusinessException {
@@ -90,7 +95,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 		}
 	}
 
-    public T buscarPorId(Serializable id) throws ServiceBusinessException {
+    public T buscarPorId(Long id) throws ServiceBusinessException {
 	    try {
 	        return dao.buscarPorId(id);
         } catch (PersistenceValidateException e) {

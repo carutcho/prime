@@ -1,6 +1,5 @@
 package br.com.prime.services.base;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 import br.com.prime.commons.data.persistence.Persistent;
@@ -16,11 +15,11 @@ public interface CrudService<T extends Persistent> extends Service {
 
     public abstract T atualizar(T entity) throws ServiceBusinessException;
 
-    public abstract T buscarPorId(Serializable id) throws ServiceBusinessException;
+    public abstract T buscarPorId(Long id) throws ServiceBusinessException;
 
     public abstract Collection<T> listarTodos() throws ServiceBusinessException;
 
-    public abstract Collection<T> buscarTodosOrdenados(final String campo, final Boolean ordem);
+    public abstract Collection<T> buscarTodosOrdenados(final String campo, final Boolean ordem) throws ServiceBusinessException;
 
     public abstract Collection<T> buscarPorRange(final int posicaoInicial, final int quantidadeRegistros) throws ServiceBusinessException;
 

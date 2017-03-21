@@ -18,11 +18,11 @@ public interface CrudDao<T extends Persistent> extends Serializable {
 
     public abstract void atualizar(T entity) throws PersistenceValidateException;
 
-    public abstract T buscarPorId(Serializable id) throws PersistenceValidateException;
+    public abstract T buscarPorId(Long id) throws PersistenceValidateException;
 
     public abstract Collection<T> listarTodos() throws PersistenceValidateException;
 
-    public abstract Collection<T> buscarTodosOrdenados(String campo, Boolean ordem);
+    public abstract Collection<T> buscarTodosOrdenados(String campo, Boolean ordem) throws PersistenceValidateException;
 
     public abstract Collection<T> buscarPorRange(final int posicaoInicial, final int quantidadeRegistros) throws PersistenceValidateException;
 
