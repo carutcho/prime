@@ -111,9 +111,9 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 	}
 	
 	//TODO: validar a necessidade de entity e entityList, util somente quando se trata de sessao
-	public P inserir() throws ServiceBusinessException{
+	/*public P inserir() throws ServiceBusinessException{
 		return this.inserir(getEntity());
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method=RequestMethod.POST)
@@ -127,7 +127,11 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 
 	@SuppressWarnings("unchecked")
 	private P inserir(P entity) throws ServiceBusinessException {
-		return (P) ((CrudService<Persistent>) servico).inserir((Persistent) entity);
+		try {	
+			return (P) ((CrudService<Persistent>) servico).inserir((Persistent) entity);
+		} catch (Exception e) {
+			throw new ServiceBusinessException(((ServiceBusinessException) e).getMessages());
+		}
 	}
 
 	@RequestMapping(value = "/{id}", method=RequestMethod.DELETE)
@@ -174,18 +178,15 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		}
 	}
 
-
 	@SuppressWarnings("unchecked")
 	public P buscarPorId(Long id) throws ServiceBusinessException {
 		return (P) ((CrudService<Persistent>) servico).buscarPorId(id);
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	public Collection<P> listar() throws ServiceBusinessException {
 		return (Collection<P>) ((CrudService<Persistent>) service).buscarTodosOrdenados("id", true);
 	}
-	
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<String> listarPersistent(){		

@@ -23,11 +23,11 @@ public class Produto implements Persistent{
 	@GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 	
-	@NotEmpty
+	@NotEmpty(message = "msg.erro.produto.nome.vazio")
 	@Column(name="nome")
 	private String nome;
 	
-	@NotEmpty
+	@NotEmpty(message = "msg.erro.produto.descricao.vazia")
 	@Column(name="descricao")
     private String descricao;
     

@@ -1,5 +1,8 @@
 package br.com.prime.services.base;
 
+import static br.com.prime.commons.utils.Utils.isEmpty;
+import static br.com.prime.commons.utils.Utils.isNotEmpty;
+
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -12,13 +15,14 @@ import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.commons.exceptions.ServiceBusinessException;
 import br.com.prime.commons.regras.RegraDeNegocio;
 import br.com.prime.commons.regras.comuns.ValidarEntidade;
+import br.com.prime.data.config.MensagensGenericas;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.persistence.CrudDao;
 
 public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>> implements CrudService<T> {
 
 	private static final long serialVersionUID = -3584132647978946856L;
-
+	
 	@Autowired
 	private Environment properties;
 	
@@ -33,6 +37,7 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
 	@Transactional
     public void remover(T entity) throws ServiceBusinessException {
 		try {
+			validar(entity);
 			dao.remover(entity);
 		} catch (PersistenceValidateException e) {
 
@@ -111,6 +116,8 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
     @Transactional
     public T inserir(T entity) throws ServiceBusinessException {
         try {
+        	validar(entity);
+        	validarExiste(entity);
             return dao.inserir(entity);
         } catch (PersistenceValidateException e) {
         	if (entity != null){
@@ -123,13 +130,15 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
     }
 
 
-    @Transactional
+	@Transactional
     public T atualizar(T entity) throws ServiceBusinessException {
         try {
-            dao.atualizar(entity);
+        	validar(entity);
+        	validarNaoExiste(entity);
+            
+        	dao.atualizar(entity);
             return dao.buscarPorId(entity.getId());
         } catch (PersistenceValidateException e) {
-        	
         	if (entity!=null){
         		log.error("metodo: atualizar - " + entity.toString() + " - Exception :[" + e.getMessage() + "] - Cause:[" + e.getCause() +"]");
         	}else{
@@ -140,11 +149,38 @@ public abstract class CrudServiceImpl<T extends Persistent, D extends CrudDao<T>
     }
 
     public void validar(T entity) throws ServiceBusinessException {
-    	RegraDeNegocio regras = new ValidarEntidade<T>(entity);
+    	RegraDeNegocio regras = new ValidarEntidade<T>(entity, properties);
 		regras.executar();
 	}
 
 	protected Environment getProperties() {
 		return properties;
 	}
+	
+	public void validarExiste(T entity) throws ServiceBusinessException {
+		T entidade = null;
+		try {
+			entidade = dao.buscarPorId(entity.getId());
+		} catch (PersistenceValidateException e) {
+			throw new ServiceBusinessException(properties.getProperty(MensagensGenericas.MSG_ERRO_GENERICA_FALHA_INSERIR));
+		}
+		
+		if (isNotEmpty(entidade)){			
+			throw new ServiceBusinessException(properties.getProperty(MensagensGenericas.MSG_ERRO_GENERICA_REGSTRO_EXISTENTE));			
+		}
+	}
+
+	public void validarNaoExiste(T entity) throws ServiceBusinessException {
+		T entidade;
+		try {
+			entidade = dao.buscarPorId(entity.getId());
+		} catch (PersistenceValidateException e) {
+			throw new ServiceBusinessException(properties.getProperty(MensagensGenericas.MSG_ERRO_GENERICA_FALHA_ATUALIZAR));
+		}
+		
+		if (isEmpty(entidade)){			
+			throw new ServiceBusinessException(properties.getProperty(MensagensGenericas.MSG_ERRO_GENERICA_NAO_ENCONTRADO));			
+		}
+	}
+	
 }

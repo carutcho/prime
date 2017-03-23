@@ -6,7 +6,7 @@ import br.com.prime.commons.data.persistence.Persistent;
 import br.com.prime.commons.exceptions.ServiceBusinessException;
 
 public interface CrudService<T extends Persistent> extends Service {
-
+	
     public abstract Class<T> getPersistentClass();
 
     public abstract void validar(T entity) throws ServiceBusinessException;
