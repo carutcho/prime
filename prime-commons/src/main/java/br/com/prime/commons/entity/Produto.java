@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import br.com.prime.commons.data.persistence.Persistent;
 
 @Entity
-@Table(name = "produto", uniqueConstraints = { @UniqueConstraint( columnNames = {"id"} ) })
+@Table(name = "produto", uniqueConstraints = { @UniqueConstraint( columnNames = {"nome"} ) })
 public class Produto implements Persistent{
     
 	private static final long serialVersionUID = 1L;

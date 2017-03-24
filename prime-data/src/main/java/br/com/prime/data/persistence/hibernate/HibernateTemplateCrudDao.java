@@ -31,7 +31,7 @@ import br.com.prime.data.config.MensagensGenericas;
 import br.com.prime.data.exception.PersistenceValidateException;
 import br.com.prime.data.persistence.CrudDao;
 
-@Transactional(rollbackFor=Exception.class, propagation=Propagation.REQUIRED)
+@Transactional
 public abstract class HibernateTemplateCrudDao<T extends Persistent> implements CrudDao<T>{
 
 	private static final long serialVersionUID = 7815903224454495303L;
