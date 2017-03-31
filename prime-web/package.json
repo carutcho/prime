@@ -1,0 +1,15 @@
+{
+  "name": "prime-web",
+  "version": "1.0.0",
+  "description": "Projeto prime web exemplo",
+  "main": "node-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Reinaldo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "express-load": "^1.1.15"
+  }
+}
