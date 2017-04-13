@@ -2,8 +2,10 @@ package br.com.prime.webservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.commons.entity.Produto;
@@ -18,5 +20,11 @@ public class ProdutoController extends AbstractCrudBean<Produto, ProdutoService>
 	@Autowired
 	public ProdutoController(ProdutoService service) {
 		super(service);
+	}
+	
+	
+	@RequestMapping(value = "/encriptar", method = RequestMethod.GET)
+	public ResponseEntity<String> encriptar(){		
+		return respostaSucesso("Obaaaa !!!!");
 	}
 }

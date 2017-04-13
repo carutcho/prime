@@ -23,9 +23,8 @@ import br.com.prime.commons.utils.GeradorMensagensRetorno;
 import br.com.prime.services.base.CrudService;
 import br.com.prime.services.base.Service;
 
-public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
+public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno {
 
-	
 	@Autowired
 	private Environment properties;
 	
@@ -41,7 +40,6 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 	private Class<P> persistentClass;
 	
 	protected Logger log = LoggerFactory.getLogger(getClass());
-	
 
 	@SuppressWarnings("unchecked")
 	public AbstractCrudBean(S service){
@@ -115,6 +113,7 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		return this.inserir(getEntity());
 	}*/
 
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method=RequestMethod.POST)
 	public P inserirPersistent(@RequestBody P entity) throws ServiceBusinessException {
@@ -125,6 +124,7 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		}		
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	private P inserir(P entity) throws ServiceBusinessException {
 		try {	
@@ -134,6 +134,7 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		}
 	}
 
+	
 	@RequestMapping(value = "/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<String> removerPersistent(@PathVariable("id") long id){
 		try {				
@@ -144,17 +145,19 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		}
 	}
 
-	@SuppressWarnings({ "unused", "unchecked" })
+	
+	@SuppressWarnings({"unchecked" })
 	private void remover(P entity) throws ServiceBusinessException {
 		((CrudService<Persistent>) servico).remover((Persistent) entity);
 	}
+	
 	
 	@SuppressWarnings("unchecked")
 	private void remover(Long id) throws ServiceBusinessException {
 		((CrudService<Persistent>) servico).remover(id);
 	}
 	
-
+	
 	@RequestMapping(method=RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<String> atualizarPersistent(@RequestBody P entity){
 		try {					
@@ -164,11 +167,13 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		}			
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	public P atualizar(P entity) throws ServiceBusinessException {
 		return (P) ((CrudService<Persistent>) servico).atualizar((Persistent) entity);
 	}
 	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> buscarPersistent(@PathVariable("id") long id){
 		try {
@@ -178,15 +183,18 @@ public abstract class AbstractCrudBean <P, S> extends GeradorMensagensRetorno{
 		}
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	public P buscarPorId(Long id) throws ServiceBusinessException {
 		return (P) ((CrudService<Persistent>) servico).buscarPorId(id);
 	}
 	
+	
 	@SuppressWarnings("unchecked")
 	public Collection<P> listar() throws ServiceBusinessException {
 		return (Collection<P>) ((CrudService<Persistent>) service).buscarTodosOrdenados("id", true);
 	}
+	
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<String> listarPersistent(){		

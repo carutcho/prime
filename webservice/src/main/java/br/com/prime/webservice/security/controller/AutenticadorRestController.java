@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import br.com.prime.commons.entity.Usuario;
 import br.com.prime.webservice.security.AutenticadorRequest;
@@ -32,6 +35,13 @@ import br.com.prime.webservice.security.TokenUtil;
 
 @RestController
 public class AutenticadorRestController {
+	
+	public static final String CREDENTIALS_NAME = "Access-Control-Allow-Credentials";
+	public static final String ORIGIN_NAME  = "Access-Control-Allow-Origin";
+	public static final String METHODS_NAME = "Access-Control-Allow-Methods";
+	public static final String HEADERS_NAME = "Access-Control-Allow-Headers";
+	public static final String MAX_AGE_NAME = "Access-Control-Max-Age";
+	
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -87,4 +97,27 @@ public class AutenticadorRestController {
         }
     }
 
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		
+		response.setHeader(CREDENTIALS_NAME, "true");
+		response.setHeader(ORIGIN_NAME, "*");
+		response.setHeader(METHODS_NAME, "GET, OPTIONS, POST, PUT, DELETE");
+		response.setHeader(HEADERS_NAME, "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+		response.setHeader(MAX_AGE_NAME, "3600");
+		
+		return true;
+	}
+	
+	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
