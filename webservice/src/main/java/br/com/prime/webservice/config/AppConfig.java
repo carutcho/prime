@@ -10,6 +10,7 @@ import org.springframework.mobile.device.DeviceHandlerMethodArgumentResolver;
 import org.springframework.mobile.device.DeviceWebArgumentResolver;
 import org.springframework.mobile.device.site.SitePreferenceHandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter;
@@ -31,20 +32,13 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	    return new DeviceHandlerMethodArgumentResolver();
 	}
 	
-/*	@Override
-    public void addInterceptors(InterceptorRegistry registry) {
-           registry.addInterceptor(new CORSInterceptor()); 
-                     super.addInterceptors(registry);
-}*/
-	 
-/*	@Override
-    public void addCorsMappings(CorsRegistry registry) {
+	 public void addCorsMappings(CorsRegistry registry) {
 		 registry.addMapping("/**")
          .allowedOrigins("*")
          .allowedMethods("GET", "OPTIONS", "POST", "PUT", "DELETE")
-//         .allowedHeaders("Origin", " X-Requested-With", "Content-Type", "Accept", "Authorization")
+         .allowedHeaders("*")
 //         .exposedHeaders("header1", "header2")
          .allowCredentials(true)
          .maxAge(3600);
-    }*/
+    }
 }

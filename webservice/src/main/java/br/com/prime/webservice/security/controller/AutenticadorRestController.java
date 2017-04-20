@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.DeviceUtils;
@@ -25,16 +26,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.prime.commons.entity.Usuario;
+import br.com.prime.commons.utils.GeradorMensagensRetorno;
 import br.com.prime.webservice.security.AutenticadorRequest;
-import br.com.prime.webservice.security.AutenticadorResponse;
 import br.com.prime.webservice.security.TokenUtil;
 
 @RestController
-public class AutenticadorRestController {
+public class AutenticadorRestController extends GeradorMensagensRetorno {
 	
 	public static final String CREDENTIALS_NAME = "Access-Control-Allow-Credentials";
 	public static final String ORIGIN_NAME  = "Access-Control-Allow-Origin";
@@ -67,8 +67,8 @@ public class AutenticadorRestController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsuario());
         final String token = tokenUtil.gerarToken(userDetails, getDevice(request));
-
-        return ResponseEntity.ok(new AutenticadorResponse(token));
+        
+        return respostaSucesso(token);
     }
 
     private Device getDevice(HttpServletRequest request) {
@@ -90,21 +90,22 @@ public class AutenticadorRestController {
         Usuario user = (Usuario) userDetailsService.loadUserByUsername(login);
 
         if (tokenUtil.isTokenPodeSerAtualizado(token, user.getUltimaAtualizacao())) {
-            String tokenAtualizado = tokenUtil.atualizarToken(token);
-            return ResponseEntity.ok(new AutenticadorResponse(tokenAtualizado));
+        	
+        	String tokenAtualizado = tokenUtil.atualizarToken(token);
+        	return respostaSucesso(tokenAtualizado);
         } else {
-            return ResponseEntity.badRequest().body(null);
+            return respostaErro(HttpStatus.BAD_REQUEST, "Autenticação requerida!");
         }
     }
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		
-		response.setHeader(CREDENTIALS_NAME, "true");
+	/*	response.setHeader(CREDENTIALS_NAME, "true");
 		response.setHeader(ORIGIN_NAME, "*");
 		response.setHeader(METHODS_NAME, "GET, OPTIONS, POST, PUT, DELETE");
 		response.setHeader(HEADERS_NAME, "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 		response.setHeader(MAX_AGE_NAME, "3600");
-		
+		*/
 		return true;
 	}
 	
