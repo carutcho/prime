@@ -8,11 +8,16 @@ angular.module('login').controller('LoginController',
 
       $scope.logar = function(){
 
-          $http({
+          let teste = $http({
                  url:'http://localhost:8080/produto/encriptar',
                  method:"POST",
                  headers: {'Content-Type': 'application/json'},
                  data: $scope.usuario
-            });
+            }).success(function (data, status, headers, config){
+              debugger;
+            }).error(function(statusText, status, headers, config){
+              debugger;
+            })
+
       }
 });
